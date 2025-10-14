@@ -36,7 +36,7 @@ class Actor(nn.Module):
         self.layer3 = nn.Linear(256, 256)
         self.output_layer = nn.Linear(256, action_dim)
         
-        self.activate = nn.ReLU(0.01)
+        self.activate = nn.ReLU()
     def forward(self, state):
         x = self.activate(self.layer1(state))
         x = self.activate(self.layer2(x))
@@ -65,7 +65,7 @@ class Critic(nn.Module):
         self.layer13 = nn.Linear(256, 256)
         self.layer14 = nn.Linear(256, 1)
         
-        self.activate = nn.ReLU(0.01)
+        self.activate = nn.ReLU()
     def forward(self, state, action):
         sa = torch.cat([state, action], 1)
         # Q1前向傳播
