@@ -132,12 +132,16 @@ class TD3Agent:
         self.total_iterations = 0
         
     def select_action(self, state, add_noise=True):
-        # 對狀態進行 mod 1 操作
-        state = np.mod(state, 1.0)
-        state = torch.FloatTensor(state).unsqueeze(0).to(device)
-        action = self.actor(state).cpu().data.numpy().flatten()
+        # 先轉 tensor 再做所有操作
+        state = torch.FloatTensor(state).to(device)
+        state = torch.fmod(state, 1.0)
+    
+        with torch.no_grad():
+            action = self.actor(state.unsqueeze(0))
+    
+        action = action.cpu().numpy().flatten()
+    
         if add_noise:
-            # 更合理的噪聲策略
             noise_std = EXPLORATION_NOISE * max(0.1, 1.0 - self.total_iterations / 50000)
             noise = np.random.normal(0, noise_std, size=action.shape)
             action = action + noise
