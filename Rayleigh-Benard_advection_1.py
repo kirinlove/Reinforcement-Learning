@@ -358,39 +358,6 @@ class CustomEnv(gym.Env):
         
         return np.array([self.x, self.y], dtype=np.float32), reward, done, {}
 
-
-# ============== 輔助函數 ==============
-def fill_buffer_with_flow_grid(agent, env, grid_size=40, num_episodes=1):
-    """用流場數據預填充 buffer"""
-    xs = np.linspace(0, 0.5, grid_size, endpoint=False)
-    ys = np.linspace(0, 0.5, grid_size, endpoint=False)
-    
-    count = 0
-    for episode in range(num_episodes):
-        for x in xs:
-            for y in ys:
-                Vx = -16 * np.sin(2 * np.pi * x) * np.cos(2 * np.pi * y)
-                Vy = 16 * np.cos(2 * np.pi * x) * np.sin(2 * np.pi * y)
-                norm = np.sqrt(Vx**2 + Vy**2) + 1e-8
-                action = np.array([Vx / norm, Vy / norm], dtype=np.float32)
-                
-                env.x, env.y = x, y
-                env.prev_x = x
-                env.current_step = 0
-                
-                next_state, reward, done, _ = env.step(action)
-                agent.replay_buffer.add(
-                    np.array([x, y], dtype=np.float32), 
-                    action, 
-                    reward, 
-                    next_state, 
-                    done
-                )
-                count += 1
-    
-    print(f"Pre-filled buffer with {count} transitions")
-
-
 def plot_training_progress(agent, env, episode, test_steps=400):
     """測試並繪製軌跡"""
     original_steps = env.steps
@@ -438,8 +405,6 @@ def main():
     action_dim = env.action_space.shape[0]
     
     agent = TD3Agent(state_dim, action_dim)
-    
-    # 預填充 buffer
     
     # 訓練參數
     max_episodes = 30000
