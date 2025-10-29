@@ -186,7 +186,6 @@ class TD3Agent:
         """選擇動作 - 優化版本"""
         # 直接用 torch 處理
         state = torch.as_tensor(state, dtype=torch.float32, device=device)
-        state = torch.fmod(state, 1.0)
         
         with torch.no_grad():  # 推理時不需要梯度
             action = self.actor(state.unsqueeze(0))
@@ -207,10 +206,6 @@ class TD3Agent:
         
         # 採樣
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(BATCH_SIZE)
-        
-        # 狀態歸一化
-        states = torch.fmod(states, 1.0)
-        next_states = torch.fmod(next_states, 1.0)
         
         # ===== 更新 Critic =====
         with torch.no_grad():
