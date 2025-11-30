@@ -18,7 +18,7 @@ GAMMA = 1.0  # 使用 1.0 而非 1
 TAU = 0.005
 LR_ACTOR = 3e-4
 LR_CRITIC = 3e-4
-EXPLORATION_NOISE = 2.9
+EXPLORATION_NOISE = 0.5
 TARGET_NOISE = 0.4
 NOISE_CLIP = 0.5
 POLICY_UPDATE_FREQ = 2
@@ -344,7 +344,7 @@ class CustomEnv(gym.Env):
         self.y_history.append(self.y)
         
         # 獎勵設計
-        progress_reward = 10 * (self.x - self.prev_x)
+        progress_reward = 5 * (self.x - self.prev_x)
         reward = progress_reward
         
         self.prev_x = self.x
@@ -353,7 +353,7 @@ class CustomEnv(gym.Env):
         
         if done:
             total_progress = self.x - self.initial_x
-            reward += total_progress * 20
+            reward += total_progress * 30
         
         return np.array([self.x, self.y], dtype=np.float32), reward, done, {}
 
@@ -371,7 +371,7 @@ def fill_buffer_with_flow_grid(agent, env, grid_size=40, num_episodes=1):
                 Vx = -16 * np.sin(2 * np.pi * x) * np.cos(2 * np.pi * y)
                 Vy = 16 * np.cos(2 * np.pi * x) * np.sin(2 * np.pi * y)
                 norm = np.sqrt(Vx**2 + Vy**2) + 1e-8
-                action = np.array([Vx / norm, Vy / norm], dtype=np.float32)
+                action = np.array([Vy / norm, -Vx / norm], dtype=np.float32)
                 
                 env.x, env.y = x, y
                 env.prev_x = x
