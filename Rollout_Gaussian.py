@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import copy
-
+import matplotlib.pyplot as plt
 
 # ================ 載入訓練好的 Actor =================
 env = CustomEnv()
@@ -66,6 +66,7 @@ def rollout_action_selection(env, agent, state,
 state = env.reset()
 xs = [state[0]]
 ys = [state[1]]
+actions = []
 
 for step in range(400):
     action = rollout_action_selection(env, agent, state,
@@ -76,13 +77,13 @@ for step in range(400):
     next_state, reward, done, _ = env.step(action)
     xs.append(next_state[0])
     ys.append(next_state[1])
+    actions.append(action)
     state = next_state
     
     if done:
         break
 
 # 畫圖
-import matplotlib.pyplot as plt
 
 plt.figure(figsize=(8,8))
 plt.plot(xs, ys, linewidth=2)
