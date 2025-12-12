@@ -497,15 +497,15 @@ def main():
                 plt.show()
             
             # 保存模型
-            agent.save(f"td3_checkpoint_ep{episode+1}.pth")
-            print(f"Model saved to td3_checkpoint_ep{episode+1}.pth\n")
+            agent.save(f"td3_checkpoint_ep_time{episode+1}.pth")
+            print(f"Model saved to td3_checkpoint_ep_time{episode+1}.pth\n")
     
     # 最終測試
     print(f"\n{'='*50}")
     print("Final Training Result")
     print(f"{'='*50}")
     plot_training_progress(agent, env, max_episodes, test_steps=400)
-    agent.save("td3_final.pth")
+    agent.save("td3_final.pth_time")
     print("Training completed!")
 
 
