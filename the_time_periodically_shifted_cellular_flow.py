@@ -120,9 +120,9 @@ class TD3Agent:
     def select_action(self, state, add_noise=True):
         # 對狀態進行 mod 操作
         modified_state = np.array([
-            state[0] % 1,  # x mod 2*pi
-            state[1] % 1,  # y mod 2*pi
-            state[2] % (1 / env.omega)  # time mod (2*pi)/w
+            state[0] % 1,  # x mod 1
+            state[1] % 1,  # y mod 1
+            state[2] % (1 / env.omega)  # time mod 1/w
         ])
         state = torch.FloatTensor(modified_state).unsqueeze(0).to(device)
         action = self.actor(state).cpu().data.numpy().flatten()
