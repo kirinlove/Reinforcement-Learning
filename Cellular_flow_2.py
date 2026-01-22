@@ -14,7 +14,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 # ============== 超參數配置 ==============
 BUFFER_SIZE = int(1e5)
 BATCH_SIZE = 256
-GAMMA = 1.0  # 使用 1.0 而非 1
+GAMMA = 1.0 
 TAU = 0.005
 LR_ACTOR = 3e-4
 LR_CRITIC = 3e-4
