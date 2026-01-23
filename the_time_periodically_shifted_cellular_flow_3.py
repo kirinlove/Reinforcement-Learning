@@ -181,7 +181,7 @@ class TD3Agent:
         
         # Replay buffer
         self.replay_buffer = ReplayBuffer(BUFFER_SIZE, state_dim, action_dim, device)
-        self.total_iterations = 0
+        self.total_iterations = 1
     
     def select_action(self, state, add_noise=True):
         """選擇動作 - 優化版本"""
