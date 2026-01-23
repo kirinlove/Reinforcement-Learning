@@ -16,8 +16,8 @@ BUFFER_SIZE = int(1e5)
 BATCH_SIZE = 64
 GAMMA = 1.0 
 TAU = 0.005
-LR_ACTOR = 3e-3
-LR_CRITIC = 3e-3
+LR_ACTOR = 3e-4
+LR_CRITIC = 3e-4
 EXPLORATION_NOISE = 1.5
 TARGET_NOISE = 0.4
 NOISE_CLIP = 0.5
@@ -53,10 +53,8 @@ class Actor(nn.Module):
         x = self.activate(self.norm((self.layer2(x))))
         x = self.activate(self.norm((self.layer3(x))))
         a = self.output_layer(x)
-        direction = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8)
-        magnitude = torch.sigmoid(torch.norm(a, dim=-1, keepdim=True))
-        action = direction * magnitude
-        return action
+        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8)
+        return a
 
 # Critic網路定義（雙Q網路）
 class Critic(nn.Module):
@@ -205,6 +203,7 @@ class TD3Agent:
             noise_std = EXPLORATION_NOISE * max(0.1, 1.0 - self.total_iterations / 50000)
             noise = np.random.normal(0, noise_std, size=action.shape)
             action = action + noise
+        action = action / (np.linalg.norm(action) + 1e-8)
         return action
     
     def train(self):
@@ -233,11 +232,6 @@ class TD3Agent:
             noise = torch.randn_like(next_actions) * TARGET_NOISE
             noise = noise.clamp(-NOISE_CLIP, NOISE_CLIP)
             next_actions = next_actions + noise
-
-            # 保證 norm ≤ 1
-            norm = torch.norm(next_actions, dim=-1, keepdim=True)
-            scale = torch.clamp(norm, max=1.0)
-            next_actions = next_actions / (norm + 1e-8) * scale
             
             # 雙 Q 學習
             target_Q1, target_Q2 = self.critic_target(next_states, next_actions)
@@ -318,7 +312,7 @@ class CustomEnv(gym.Env):
         self.prev_x = 0.0
         self.time = 0
         self.initial_x = 0.0
-        self.omega = 1.6
+        self.omega = 5.0
         
         self.x_history = []
         self.y_history = []
@@ -345,8 +339,7 @@ class CustomEnv(gym.Env):
         self.u, self.v = action
         direction = np.array([self.u, self.v])
         norm = np.linalg.norm(direction) + 1e-8
-        if norm > 1.0:
-            direction = direction / norm
+        direction = direction / norm
         
         # ODE 求解
         def ode(t, s):
@@ -366,7 +359,7 @@ class CustomEnv(gym.Env):
         self.y_history.append(self.y)
         
         # 獎勵設計
-        progress_reward = 2 * (self.x - self.prev_x)
+        progress_reward = 1 * (self.x - self.prev_x)
         reward = progress_reward 
         
         self.prev_x = self.x
@@ -375,7 +368,7 @@ class CustomEnv(gym.Env):
         
         if done:
             total_progress = self.x - self.initial_x
-            reward += total_progress * 1
+            reward += total_progress * 6
         
         return np.array([self.x, self.y, self.time], dtype=np.float32), reward, done, {}
 
@@ -428,9 +421,9 @@ def main():
     agent = TD3Agent(state_dim, action_dim, omega=env.omega)
     
     # 訓練參數
-    max_episodes = 50000
+    max_episodes = 30000
     max_steps = 40
-    plot_interval = 100
+    plot_interval = 250
     
     # 記錄
     reward_history = []
