@@ -53,7 +53,7 @@ class Actor(nn.Module):
         x = self.activate(self.norm((self.layer2(x))))
         x = self.activate(self.norm((self.layer3(x))))
         a = self.output_layer(x)
-        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8)
+        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8) 
         return a
 
 # Critic網路定義（雙Q網路）
