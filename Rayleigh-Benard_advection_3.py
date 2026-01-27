@@ -191,7 +191,7 @@ class TD3Agent:
             state[1] % 2*np.pi,  # y mod 2pi
             state[2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ])
-        state = torch.as_tensor(state, dtype=torch.float32, device=device)
+        state = torch.as_tensor(modified_state, dtype=torch.float32, device=device)
         
         with torch.no_grad():  # 推理時不需要梯度
             action = self.actor(state.unsqueeze(0))
