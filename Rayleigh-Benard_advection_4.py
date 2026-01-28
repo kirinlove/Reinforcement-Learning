@@ -187,8 +187,8 @@ class TD3Agent:
         """選擇動作 - 優化版本"""
         # 直接用 torch 處理
         modified_state = np.array([
-            state[0],  # x mod 2pi
-            state[1],  # y mod 2pi
+            state[0],
+            state[1],
             state[2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ])
         state = torch.as_tensor(modified_state, dtype=torch.float32, device=device)
@@ -214,14 +214,14 @@ class TD3Agent:
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(BATCH_SIZE)
 
         states = torch.stack([
-            states[:, 0],  # x mod 2pi
-            states[:, 1],  # y mod 2pi
+            states[:, 0],
+            states[:, 1],
             states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ], dim=1)
         
         next_states = torch.stack([
-            next_states[:, 0],  # x mod 2pi
-            next_states[:, 1],  # y mod 2pi
+            next_states[:, 0],
+            next_states[:, 1],
             next_states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ], dim=1)
       
