@@ -6,6 +6,7 @@
 
 # Environment Setup
 &#8226; Install [**Anaconda 24.11.3**](https://www.anaconda.com/products/distribution) for your operating system.  
+
 &#8226; Anaconda Prompt:
 ```python
 conda install git
