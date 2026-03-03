@@ -41,4 +41,8 @@ python Reinforcement-Learning/Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
 ```
 
 # Testing
-
+Anaconda Prompt:
+```bash
+conda activate thesis-rl
+python Reinforcement-Learning/test.py
+```
