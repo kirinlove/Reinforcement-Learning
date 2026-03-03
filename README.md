@@ -1,4 +1,5 @@
-# Reinforcement-Learning
+# Finding Optimal Trajectories in Front Propagation Problem by Deep Reinforcement Learning 
+
 
 ### Reinforcement Learning Policy Performance in Unsteady Cellular Flow
 <img width="400" height="711" alt="image" src="https://github.com/user-attachments/assets/93ab1a8b-c296-408e-828c-67f03d0dd498" />
