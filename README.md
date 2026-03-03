@@ -31,7 +31,7 @@ python Reinforcement-Learning/Cellular_flow/Cellular_flow_2.py
 Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
-python Reinforcement-Learning/test_1.py
+python Reinforcement-Learning/Cellular_flow/test_1.py
 ```
 
 ### Rayleigh-Benard Advection
@@ -45,7 +45,7 @@ python Reinforcement-Learning/Rayleigh-Benard_advection/Rayleigh-Benard_advectio
 Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
-python Reinforcement-Learning/test_2.py
+python Reinforcement-Learning/Rayleigh-Benard_advection/test_2.py
 ```
 
 ### Unsteady Cellular Flow
@@ -59,6 +59,6 @@ python Reinforcement-Learning/Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
 Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
-python Reinforcement-Learning/test_3.py
+python Reinforcement-Learning/Unsteady_Cellular_flow/test_3.py
 ```
 
