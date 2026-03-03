@@ -19,7 +19,18 @@ pip install numpy matplotlib scipy gym
 ```
 
 # Training
-&#8226; Cellular flow
+&#8226; Cellular Flow
 ```bash
 python Cellular_flow/Cellular_flow_2.py
 ```
+
+&#8226; Rayleigh-Benard Advection
+```bash
+python Rayleigh-Benard_advection/Rayleigh-Benard_advection_4.py
+```
+
+&#8226; Unsteady Cellular Flow
+```bash
+python Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
+```
+
