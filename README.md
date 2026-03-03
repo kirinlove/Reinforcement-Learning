@@ -5,4 +5,5 @@
 <img width="600" height="811" alt="image" src="https://github.com/user-attachments/assets/14eb639e-7ff7-4b67-97be-e0450e3e6cdc" />
 
 # Build
-&#8226; Install Anaconda 24.11.3
+&#8226; Install [**Anaconda 24.11.3**](https://www.anaconda.com/products/distribution) for your operating system.  
+This version ensures compatibility with Python 3.10 and GPU-enabled PyTorch.
