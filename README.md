@@ -1,4 +1,5 @@
 # Reinforcement-Learning
 
-<img width="406" height="778" alt="image" src="https://github.com/user-attachments/assets/24423cdb-bfd3-4286-84fc-36ff1aa558d7" />
+<img width="400" height="811" alt="image" src="https://github.com/user-attachments/assets/93ab1a8b-c296-408e-828c-67f03d0dd498" />
+
 
