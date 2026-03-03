@@ -33,6 +33,7 @@ Anaconda Prompt:
 conda activate thesis-rl
 python Reinforcement-Learning/Cellular_flow/test_1.py
 ```
+Make sure to check which model is being loaded
 
 ### Rayleigh-Benard Advection
 &#8226; Training <br>
@@ -47,6 +48,7 @@ Anaconda Prompt:
 conda activate thesis-rl
 python Reinforcement-Learning/Rayleigh-Benard_advection/test_2.py
 ```
+Make sure to check which model is being loaded
 
 ### Unsteady Cellular Flow
 &#8226; Training <br>
@@ -61,4 +63,5 @@ Anaconda Prompt:
 conda activate thesis-rl
 python Reinforcement-Learning/Unsteady_Cellular_flow/test_3.py
 ```
+Make sure to check which model is being loaded
 
