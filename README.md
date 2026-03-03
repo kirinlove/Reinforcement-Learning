@@ -8,7 +8,7 @@
 &#8226; Install [**Anaconda 24.11.3**](https://www.anaconda.com/products/distribution) for your operating system.  
 
 &#8226; Anaconda Prompt:
-```python
+```bash
 conda install git
 git clone https://github.com/kirinlove/Reinforcement-Learning.git
 cd Reinforcement-Learning
@@ -16,4 +16,10 @@ conda create -n thesis-rl python=3.10 -y
 conda activate thesis-rl
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 pip install numpy matplotlib scipy gym
+```
+
+# Training
+&#8226; Cellular flow
+```bash
+python Cellular_flow/Cellular_flow_2.py
 ```
