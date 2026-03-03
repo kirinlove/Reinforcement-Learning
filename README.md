@@ -20,17 +20,25 @@ pip install numpy matplotlib scipy gym
 
 # Training
 &#8226; Cellular Flow
+Anaconda Prompt:
 ```bash
-python Cellular_flow/Cellular_flow_2.py
+conda activate thesis-rl
+python Reinforcement-Learning/Cellular_flow/Cellular_flow_2.py
 ```
 
 &#8226; Rayleigh-Benard Advection
+Anaconda Prompt:
 ```bash
-python Rayleigh-Benard_advection/Rayleigh-Benard_advection_4.py
+conda activate thesis-rl
+python Reinforcement-Learning/Rayleigh-Benard_advection/Rayleigh-Benard_advection_4.py
 ```
 
 &#8226; Unsteady Cellular Flow
+Anaconda Prompt:
 ```bash
-python Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
+conda activate thesis-rl
+python Reinforcement-Learning/Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
 ```
+
+# Testing
 
