@@ -27,30 +27,38 @@ Anaconda Prompt:
 conda activate thesis-rl
 python Reinforcement-Learning/Cellular_flow/Cellular_flow_2.py
 ```
+&#8226; Testing <br>
+Anaconda Prompt: 
+```bash
+conda activate thesis-rl
+python Reinforcement-Learning/test_1.py
+```
+
+### Rayleigh-Benard Advection
 &#8226; Training <br>
 Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
-python Reinforcement-Learning/test.py
-```
-
-&#8226; Rayleigh-Benard Advection \\
-Anaconda Prompt:
-```bash
-conda activate thesis-rl
 python Reinforcement-Learning/Rayleigh-Benard_advection/Rayleigh-Benard_advection_4.py
 ```
+&#8226; Testing <br>
+Anaconda Prompt: 
+```bash
+conda activate thesis-rl
+python Reinforcement-Learning/test_2.py
+```
 
-&#8226; Unsteady Cellular Flow \\
-Anaconda Prompt:
+### Unsteady Cellular Flow
+&#8226; Training <br>
+Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
 python Reinforcement-Learning/Unsteady_Cellular_flow/Unsteady_Cellular_flow_3.py
 ```
-
-# Testing
-Anaconda Prompt:
+&#8226; Testing <br>
+Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
-python Reinforcement-Learning/test.py
+python Reinforcement-Learning/test_3.py
 ```
+
