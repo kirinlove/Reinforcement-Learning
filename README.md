@@ -20,14 +20,16 @@ pip install numpy matplotlib scipy gym
 ```
 
 # Training & Testing
-### Cellular Flow <br> <br>
+### Cellular Flow <br>
 &#8226; Training <br>
 Anaconda Prompt: 
 ```bash
 conda activate thesis-rl
 python Reinforcement-Learning/Cellular_flow/Cellular_flow_2.py
 ```
-```bash (Testing)
+&#8226; Training <br>
+Anaconda Prompt: 
+```bash
 conda activate thesis-rl
 python Reinforcement-Learning/test.py
 ```
