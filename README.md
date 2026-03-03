@@ -19,22 +19,26 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
 pip install numpy matplotlib scipy gym
 ```
 
-# Training
-&#8226; Cellular Flow
+# Training & Testing
+&#8226; Cellular Flow \\
 Anaconda Prompt:
-```bash
+```bash (Training)
 conda activate thesis-rl
 python Reinforcement-Learning/Cellular_flow/Cellular_flow_2.py
 ```
+```bash (Testing)
+conda activate thesis-rl
+python Reinforcement-Learning/test.py
+```
 
-&#8226; Rayleigh-Benard Advection
+&#8226; Rayleigh-Benard Advection \\
 Anaconda Prompt:
 ```bash
 conda activate thesis-rl
 python Reinforcement-Learning/Rayleigh-Benard_advection/Rayleigh-Benard_advection_4.py
 ```
 
-&#8226; Unsteady Cellular Flow
+&#8226; Unsteady Cellular Flow \\
 Anaconda Prompt:
 ```bash
 conda activate thesis-rl
