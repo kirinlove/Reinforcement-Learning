@@ -6,4 +6,16 @@
 
 # Build
 &#8226; Install [**Anaconda 24.11.3**](https://www.anaconda.com/products/distribution) for your operating system.  
-This version ensures compatibility with Python 3.10 and GPU-enabled PyTorch.
+
+# Environment Setup
+Anaconda Prompt:
+```python
+conda install git
+git clone https://github.com/kirinlove/Reinforcement-Learning.git
+cd Reinforcement-Learning
+conda create -n thesis-rl python=3.10 -y
+pip install numpy matplotlib scipy gym
+conda activate thesis-rl
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+pip install numpy matplotlib scipy gym
+```
