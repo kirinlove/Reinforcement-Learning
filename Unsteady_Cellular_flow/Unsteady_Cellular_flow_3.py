@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
+import random
 from collections import deque
 import matplotlib.pyplot as plt
 import gym
@@ -26,6 +27,15 @@ POLICY_UPDATE_FREQ = 10
 # 設備配置
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
+
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 # ============== 網路定義 ==============
 class Actor(nn.Module):
@@ -186,12 +196,8 @@ class TD3Agent:
     def select_action(self, state, add_noise=True):
         """選擇動作 - 優化版本"""
         # 直接用 torch 處理
-        modified_state = np.array([
-            state[0] % 1,  # x mod 1
-            state[1] % 1,  # y mod 1
-            state[2] % (1 / self.omega)  # time mod 1/w
-        ])
-        state = torch.as_tensor(modified_state, dtype=torch.float32, device=device)
+        state = torch.as_tensor(state, dtype=torch.float32, device=device)
+        state[0:2] = torch.fmod(state[0:2], 1.0)
         
         with torch.no_grad():  # 推理時不需要梯度
             action = self.actor(state.unsqueeze(0))
@@ -213,17 +219,8 @@ class TD3Agent:
         # 採樣
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(BATCH_SIZE)
 
-        states = torch.stack([
-            states[:, 0] % 1,  # x mod 1
-            states[:, 1] % 1,  # y mod 1
-            states[:, 2] % (1 / self.omega)  # time mod 1/w
-        ], dim=1)
-        
-        next_states = torch.stack([
-            next_states[:, 0] % 1,  # x mod 1
-            next_states[:, 1] % 1,  # y mod 1
-            next_states[:, 2] % (1 / self.omega)  # time mod 1/w
-        ], dim=1)
+        states[:, 0:2] = torch.fmod(states[:, 0:2], 1.0)
+        next_states[:, 0:2] = torch.fmod(next_states[:, 0:2], 1.0)
         
         # ===== 更新 Critic =====
         with torch.no_grad():
@@ -319,7 +316,16 @@ class CustomEnv(gym.Env):
         self.y_history = []
         
         self.action_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(3,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)
+
+    def _get_state(self):
+        sin_t = np.sin(2 * np.pi * self.omega * self.time)
+        cos_t = np.cos(2 * np.pi * self.omega * self.time)
+        
+        Vx = 4 * (- np.sin(2 * np.pi * self.x + self.B * np.sin(2 * np.pi * self.omega * self.time)) * np.cos(2 * np.pi * self.y))
+        Vy = 4 * ( np.cos(2 * np.pi * self.x + self.B * np.sin(2 * np.pi * self.omega * self.time)) * np.sin(2 * np.pi * self.y))
+        
+        return np.array([self.x, self.y, sin_t, cos_t, Vx, Vy], dtype=np.float32)
     
     def reset(self):
         self.current_step = 0
@@ -334,7 +340,7 @@ class CustomEnv(gym.Env):
         self.x_history = [self.x]
         self.y_history = [self.y]
         
-        return np.array([self.x, self.y, self.time], dtype=np.float32)
+        return self._get_state()
     
     def step(self, action):
         self.u, self.v = action
@@ -371,7 +377,7 @@ class CustomEnv(gym.Env):
             total_progress = self.x - self.initial_x
             reward += total_progress * 1
         
-        return np.array([self.x, self.y, self.time], dtype=np.float32), reward, done, {}
+        return self._get_state(), reward, done, {}
 
 def plot_training_progress(agent, env, episode, test_steps=400):
     """測試並繪製軌跡"""
@@ -415,6 +421,7 @@ def plot_training_progress(agent, env, episode, test_steps=400):
 
 # ============== 主訓練循環 ==============
 def main():
+    set_seed(42)
     env = CustomEnv()
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.shape[0]
