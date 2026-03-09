@@ -181,7 +181,7 @@ class TD3Agent:
         
         # Replay buffer
         self.replay_buffer = ReplayBuffer(BUFFER_SIZE, state_dim, action_dim, device)
-        self.total_iterations = 0
+        self.total_iterations = 1
     
     def select_action(self, state, add_noise=True):
         """選擇動作 - 優化版本"""
@@ -312,7 +312,7 @@ class CustomEnv(gym.Env):
         self.prev_x = 0.0
         self.time = 0
         self.initial_x = 0.0
-        self.omega = 1.9
+        self.omega = 3.0
         self.B = 1.0
         
         self.x_history = []
@@ -345,8 +345,9 @@ class CustomEnv(gym.Env):
         # ODE 求解
         def ode(t, s):
             x, y = s
-            Vx = 4 * (- np.sin(2 * np.pi * x + self.B * np.sin(2 * np.pi * self.omega * t)) * np.cos(2 * np.pi * y))
-            Vy = 4 * ( np.cos(2 * np.pi * x + self.B * np.sin(2 * np.pi * self.omega * t)) * np.sin(2 * np.pi * y))
+            t_global = self.time + t
+            Vx = 4 * (- np.sin(2 * np.pi * x + self.B * np.sin(2 * np.pi * self.omega * t_global)) * np.cos(2 * np.pi * y))
+            Vy = 4 * ( np.cos(2 * np.pi * x + self.B * np.sin(2 * np.pi * self.omega * t_global)) * np.sin(2 * np.pi * y))
             return [Vx + direction[0], Vy + direction[1]]
         
         s0 = [self.x, self.y]
