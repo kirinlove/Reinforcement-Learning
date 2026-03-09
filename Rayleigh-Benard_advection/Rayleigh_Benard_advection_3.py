@@ -53,7 +53,7 @@ class Actor(nn.Module):
         x = self.activate(self.norm((self.layer2(x))))
         x = self.activate(self.norm((self.layer3(x))))
         a = self.output_layer(x)
-        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8) 
+        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8)
         return a
 
 # Critic網路定義（雙Q網路）
@@ -187,8 +187,8 @@ class TD3Agent:
         """選擇動作 - 優化版本"""
         # 直接用 torch 處理
         modified_state = np.array([
-            state[0] % 2*np.pi ,  # x mod 2pi
-            state[1] % 2*np.pi,  # y mod 2pi
+            state[0],
+            state[1],
             state[2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ])
         state = torch.as_tensor(modified_state, dtype=torch.float32, device=device)
@@ -214,14 +214,14 @@ class TD3Agent:
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(BATCH_SIZE)
 
         states = torch.stack([
-            states[:, 0] % 2*np.pi,  # x mod 2pi
-            states[:, 1] % 2*np.pi,  # y mod 2pi
+            states[:, 0],
+            states[:, 1],
             states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ], dim=1)
         
         next_states = torch.stack([
-            next_states[:, 0] % 2*np.pi,  # x mod 2pi
-            next_states[:, 1] % 2*np.pi,  # y mod 2pi
+            next_states[:, 0],
+            next_states[:, 1],
             next_states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ], dim=1)
       
@@ -312,7 +312,7 @@ class CustomEnv(gym.Env):
         self.prev_x = 0.0
         self.time = 0
         self.initial_x = 0.0
-        self.omega = 5.0
+        self.omega = 1.2
         
         self.x_history = []
         self.y_history = []
@@ -423,7 +423,7 @@ def main():
     # 訓練參數
     max_episodes = 30000
     max_steps = 40
-    plot_interval = 250
+    plot_interval = 100
     
     # 記錄
     reward_history = []
