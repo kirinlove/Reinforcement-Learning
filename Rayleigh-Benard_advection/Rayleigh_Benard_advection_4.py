@@ -311,12 +311,16 @@ class CustomEnv(gym.Env):
         self.y_history = []
         
         self.action_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(4,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float32)
         
     def _get_state(self):
         sin_t = np.sin(self.omega * self.time)
         cos_t = np.cos(self.omega * self.time)
-        return np.array([self.x, self.y, sin_t, cos_t], dtype=np.float32)
+        
+        Vx = 4 * (np.cos(self.y) + np.sin(self.y) * np.cos(self.omega * self.time))
+        Vy = 4 * (np.cos(self.x) + np.sin(self.x) * np.cos(self.omega * self.time))
+        
+        return np.array([self.x, self.y, sin_t, cos_t, Vx, Vy], dtype=np.float32)
         
     def reset(self):
         self.current_step = 0
