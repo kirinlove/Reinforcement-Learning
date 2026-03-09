@@ -155,7 +155,8 @@ class ReplayBuffer:
 
 # ============== TD3 Agent ==============
 class TD3Agent:
-    def __init__(self, state_dim, action_dim):
+    def __init__(self, state_dim, action_dim, omega):
+        self.omega = omega
         # Actor 網路
         self.actor = Actor(state_dim, action_dim).to(device)
         self.actor_target = Actor(state_dim, action_dim).to(device)
@@ -185,6 +186,11 @@ class TD3Agent:
     def select_action(self, state, add_noise=True):
         """選擇動作 - 優化版本"""
         # 直接用 torch 處理
+        modified_state = np.array([
+            state[0] % 2*np.pi ,  # x mod 2pi
+            state[1] % 2*np.pi,  # y mod 2pi
+            state[2] % (2*np.pi / self.omega)  # time mod 2pi/w
+        ])
         state = torch.as_tensor(state, dtype=torch.float32, device=device)
         
         with torch.no_grad():  # 推理時不需要梯度
@@ -206,7 +212,19 @@ class TD3Agent:
         
         # 採樣
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(BATCH_SIZE)
+
+        states = torch.stack([
+            states[:, 0] % 2*np.pi,  # x mod 2pi
+            states[:, 1] % 2*np.pi,  # y mod 2pi
+            states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
+        ], dim=1)
         
+        next_states = torch.stack([
+            next_states[:, 0] % 2*np.pi,  # x mod 2pi
+            next_states[:, 1] % 2*np.pi,  # y mod 2pi
+            next_states[:, 2] % (2*np.pi / self.omega)  # time mod 2pi/w
+        ], dim=1)
+      
         # ===== 更新 Critic =====
         with torch.no_grad():
             # 目標動作 + 噪聲
@@ -294,13 +312,13 @@ class CustomEnv(gym.Env):
         self.prev_x = 0.0
         self.time = 0
         self.initial_x = 0.0
-        self.omega = 3.0
+        self.omega = 4.0
         
         self.x_history = []
         self.y_history = []
         
         self.action_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(2,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(3,), dtype=np.float32)
     
     def reset(self):
         self.current_step = 0
@@ -315,7 +333,7 @@ class CustomEnv(gym.Env):
         self.x_history = [self.x]
         self.y_history = [self.y]
         
-        return np.array([self.x, self.y], dtype=np.float32)
+        return np.array([self.x, self.y, self.time], dtype=np.float32)
     
     def step(self, action):
         self.u, self.v = action
@@ -351,7 +369,7 @@ class CustomEnv(gym.Env):
             total_progress = self.x - self.initial_x
             reward += total_progress * 1
         
-        return np.array([self.x, self.y], dtype=np.float32), reward, done, {}
+        return np.array([self.x, self.y, self.time], dtype=np.float32), reward, done, {}
 
 def plot_training_progress(agent, env, episode, test_steps=400):
     """測試並繪製軌跡"""
@@ -399,7 +417,7 @@ def main():
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.shape[0]
     
-    agent = TD3Agent(state_dim, action_dim)
+    agent = TD3Agent(state_dim, action_dim, omega=env.omega)
     
     # 訓練參數
     max_episodes = 30000
