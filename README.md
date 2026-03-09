@@ -4,12 +4,6 @@
 ### Reinforcement Learning Policy Performance in Unsteady Cellular Flow
 <img width="300" height="711" alt="image" src="https://github.com/user-attachments/assets/93ab1a8b-c296-408e-828c-67f03d0dd498" />
 <img width="450" height="711" alt="image" src="https://github.com/user-attachments/assets/14eb639e-7ff7-4b67-97be-e0450e3e6cdc" />
-<img width="450" height="711" alt="image" src="https://github.com/kirinlove/Reinforcement-Learning/blob/main/unsteady_flow_w_3.gif?raw=true" />
-<div style="width: 500px; height: 300px; overflow: hidden;">
-  <img src="[./images/你的动图.gif](https://github.com/kirinlove/Reinforcement-Learning/blob/main/unsteady_flow_w_3.gif?raw=true)" 
-       style="width: 100%; height: 100%; object-fit: cover;" 
-       alt="GIF描述文字">
-</div>
 
 # Environment Setup
 &#8226; Install [**Anaconda 24.11.3**](https://www.anaconda.com/products/distribution) for your operating system.  
