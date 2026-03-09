@@ -53,7 +53,7 @@ class Actor(nn.Module):
         x = self.activate(self.norm((self.layer2(x))))
         x = self.activate(self.norm((self.layer3(x))))
         a = self.output_layer(x)
-        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8)
+        a = a / (torch.norm(a, dim=-1, keepdim=True) + 1e-8) 
         return a
 
 # Critic網路定義（雙Q網路）
@@ -181,7 +181,7 @@ class TD3Agent:
         
         # Replay buffer
         self.replay_buffer = ReplayBuffer(BUFFER_SIZE, state_dim, action_dim, device)
-        self.total_iterations = 0
+        self.total_iterations = 1
     
     def select_action(self, state, add_noise=True):
         """選擇動作 - 優化版本"""
@@ -191,7 +191,7 @@ class TD3Agent:
             state[1] % 2*np.pi,  # y mod 2pi
             state[2] % (2*np.pi / self.omega)  # time mod 2pi/w
         ])
-        state = torch.as_tensor(state, dtype=torch.float32, device=device)
+        state = torch.as_tensor(modified_state, dtype=torch.float32, device=device)
         
         with torch.no_grad():  # 推理時不需要梯度
             action = self.actor(state.unsqueeze(0))
@@ -301,8 +301,8 @@ class TD3Agent:
 class CustomEnv(gym.Env):
     def __init__(self):
         super(CustomEnv, self).__init__()
-        self.dt = 0.125
-        self.T = 5
+        self.dt = 0.25
+        self.T = 10
         self.steps = int(self.T / self.dt)
         self.current_step = 0
         self.x = 0.0
@@ -312,7 +312,7 @@ class CustomEnv(gym.Env):
         self.prev_x = 0.0
         self.time = 0
         self.initial_x = 0.0
-        self.omega = 4.0
+        self.omega = 5.0
         
         self.x_history = []
         self.y_history = []
@@ -344,8 +344,9 @@ class CustomEnv(gym.Env):
         # ODE 求解
         def ode(t, s):
             x, y = s
-            Vx = 4 * (np.cos(y) + np.sin(y) * np.cos(self.omega * t))
-            Vy = 4 * (np.cos(x) + np.sin(x) * np.cos(self.omega * t))
+            t_global = self.time + t
+            Vx = 4 * (np.cos(y) + np.sin(y) * np.cos(self.omega * t_global))
+            Vy = 4 * (np.cos(x) + np.sin(x) * np.cos(self.omega * t_global))
             return [Vx + direction[0], Vy + direction[1]]
         
         s0 = [self.x, self.y]
@@ -358,7 +359,7 @@ class CustomEnv(gym.Env):
         self.y_history.append(self.y)
         
         # 獎勵設計
-        progress_reward = 2 * (self.x - self.prev_x)
+        progress_reward = 1 * (self.x - self.prev_x)
         reward = progress_reward 
         
         self.prev_x = self.x
@@ -367,7 +368,7 @@ class CustomEnv(gym.Env):
         
         if done:
             total_progress = self.x - self.initial_x
-            reward += total_progress * 1
+            reward += total_progress * 6
         
         return np.array([self.x, self.y, self.time], dtype=np.float32), reward, done, {}
 
